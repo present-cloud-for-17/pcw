@@ -63,7 +63,7 @@ export default {
         submitForm() {
             this.$refs.login.validate(valid => {
                 if (valid) {
-                    this.$message.success('登录成功');
+                    this.$message.success('注册成功');
                     localStorage.setItem('ms_username', this.param.username);
                     this.$router.push('/');
                 } else {

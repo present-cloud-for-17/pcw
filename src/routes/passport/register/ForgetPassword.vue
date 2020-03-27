@@ -33,8 +33,7 @@ export default {
                 password: '123123',
             },
             rules: {
-                username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-                password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+                username: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
             },
         };
     },
@@ -42,11 +41,11 @@ export default {
         submitForm() {
             this.$refs.login.validate(valid => {
                 if (valid) {
-                    this.$message.success('登录成功');
+                    this.$message.success('发送成功');
                     localStorage.setItem('ms_username', this.param.username);
                     this.$router.push('/');
                 } else {
-                    this.$message.error('请输入账号和密码');
+                    this.$message.error('请输入邮箱');
                     console.log('error submit!!');
                     return false;
                 }
