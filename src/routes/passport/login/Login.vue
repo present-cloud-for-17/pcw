@@ -1,0 +1,126 @@
+<template>
+    <el-row>
+        <el-col :span="17">
+            <img src="../../../shared/components/assets/img/login-bg.jpg" />
+        </el-col>
+        <el-col :span="7">
+            <div class="ms-login">
+            <div class="ms-title">云到后端管理系统</div>
+            <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
+                <el-form-item prop="username">
+                    <el-input v-model="param.username" placeholder="username">
+                        <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                    </el-input>
+                </el-form-item>
+                <el-form-item prop="password">
+                    <el-input
+                        type="password"
+                        placeholder="password"
+                        v-model="param.password"
+                        @keyup.enter.native="submitForm()"
+                    >
+                        <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                    </el-input>
+                </el-form-item>
+                <el-button type="text" class="login-tips-register" @click="forgetpassward()">忘记密码？</el-button>
+                <div class="login-btn">
+                    <el-button type="primary" @click="submitForm()">登录</el-button>
+                </div>
+                <p class="login-tips">还没有账号？快来
+                <el-button type="text" class="login-tips-register" @click="registernew()">立即注册</el-button>
+                吧！</p>
+            </el-form>
+        </div></el-col>
+        
+    </el-row>
+</template>
+
+<script>
+export default {
+    data: function() {
+        return {
+            param: {
+                username: 'admin',
+                password: '123123',
+            },
+            rules: {
+                username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+                password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+            },
+        };
+    },
+    methods: {
+        submitForm() {
+            this.$refs.login.validate(valid => {
+                if (valid) {
+                    this.$message.success('登录成功');
+                    localStorage.setItem('ms_username', this.param.username);
+                    this.$router.push('/');
+                } else {
+                    this.$message.error('请输入账号和密码');
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        registernew() {
+                this.$router.push('/register');
+        },
+        forgetpassward(){
+            this.$router.push('/forgetpassword');
+        }
+    },
+};
+</script>
+
+<style scoped>
+.login-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-image: url(../../../shared/components/assets/img/login-bg.jpg);
+    background-size: 100%;
+}
+.ms-login {
+    padding: 30px 30px 1000px 30px;
+    background: #fff;
+    width: 350px;
+    display: absolute;
+    height:100%;
+    left:0px;
+}
+.ms-title {
+    width: 100%;
+    line-height: 100px;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 700;
+    color: #000000;   
+}
+.ms-content {
+    padding: 30px 60px;
+}
+
+.login-btn {
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    padding: 0;
+    font-size: 20px;
+}
+.login-btn button {
+    width: 100%;
+    height: 36px;
+    margin-bottom: 10px;
+}
+.login-tips {
+    font-size: 12px;
+    line-height: 30px;
+    color: #000000;
+}
+.login-tips-register {
+    font-size: 12px;
+    line-height: 30px;
+    color: #004ef7;
+}
+</style>
