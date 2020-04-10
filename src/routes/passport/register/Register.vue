@@ -8,14 +8,14 @@
             <div class="ms-title">用户注册</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
-                    <el-input v-model="param.username" placeholder="username">
+                    <el-input v-model="param.username" placeholder="请输入用户名">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input
                         type="password"
-                        placeholder="password"
+                        placeholder="请输入密码"
                         v-model="param.password"
                         @keyup.enter.native="submitForm()"
                     >
@@ -25,7 +25,7 @@
                 <el-form-item prop="password">
                     <el-input
                         type="password"
-                        placeholder="password"
+                        placeholder="请确认密码"
                         v-model="param.password"
                         @keyup.enter.native="submitForm()"
                     >
@@ -49,8 +49,8 @@ export default {
     data: function() {
         return {
             param: {
-                username: 'admin',
-                password: '123123',
+                username: '',
+                password: '',
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -64,8 +64,8 @@ export default {
             this.$refs.login.validate(valid => {
                 if (valid) {
                     this.$message.success('注册成功');
-                    localStorage.setItem('ms_username', this.param.username);
-                    this.$router.push('/');
+                    //localStorage.setItem('ms_username', this.param.username);
+                    this.$router.push('/login');
                 } else {
                     this.$message.error('请输入账号和密码');
                     console.log('error submit!!');

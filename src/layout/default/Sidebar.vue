@@ -12,7 +12,7 @@
         >
             <template v-for="item in items">
 
-                <template v-if="item.unknown == false"></template>
+                <template v-if="name == item.unknown"></template>
 
                 <template v-else-if="item.subs">
                     <el-submenu :index="item.index" :key="item.index">
@@ -57,33 +57,35 @@
 <script>
 import bus from '../default/bus';
 export default {
+    name: 'sidebar',
     data() {
         return {
+            name: localStorage.getItem('ms_username'),
             collapse: false,
             items: [
                 {
                     icon: 'el-icon-lx-home',
                     index: 'dashboard',
                     title: '系统首页',
-                    unknown:true
+                    unknown:'true'
                 },
                 {
                     icon: 'el-icon-lx-calendar',
                     index: 'user',
                     title: '用户信息',
-                    unknown:true
+                    unknown:'teacher'
                 },
                 {
                     icon: 'el-icon-lx-copy',
                     index: 'tabs',
                     title: '个人消息',
-                    unknown:true
+                    unknown:'true'
                 },
                 {
                     icon: 'el-icon-lx-warn',
                     index: '7',
                     title: '错误处理',
-                    unknown:false,
+                    unknown:'admin',
                     subs: [
                         {
                             index: 'permission',
@@ -99,13 +101,13 @@ export default {
                     icon: 'el-icon-lx-warn',
                     index: 'level',
                     title: '等级设置',
-                    unknown:true
+                    unknown:'teacher'
                 },
                 {
                     icon: 'el-icon-lx-global',
                     index: 'i18n',
                     title: '使用说明',
-                    unknown:true
+                    unknown:'true'
                 }
             ]
         };

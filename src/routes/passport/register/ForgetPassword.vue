@@ -7,8 +7,8 @@
             <div class="ms-login">
             <div class="ms-title">忘记密码</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
-                <el-form-item prop="username">
-                    <el-input v-model="param.username" placeholder="username">
+                <el-form-item prop="email">
+                    <el-input v-model="param.email" placeholder="请输入邮箱">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
@@ -29,8 +29,7 @@ export default {
     data: function() {
         return {
             param: {
-                username: 'admin',
-                password: '123123',
+                email: '',
             },
             rules: {
                 username: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
@@ -42,8 +41,7 @@ export default {
             this.$refs.login.validate(valid => {
                 if (valid) {
                     this.$message.success('发送成功');
-                    localStorage.setItem('ms_username', this.param.username);
-                    this.$router.push('/');
+                    this.$router.push('/login');
                 } else {
                     this.$message.error('请输入邮箱');
                     console.log('error submit!!');
