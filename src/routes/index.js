@@ -22,8 +22,14 @@ export default new Router({
                 {
                     //用户信息
                     path: '/user',
-                    component: () => import(/* webpackChunkName: "table" */ '../routes/passport/shared/UserFrom.vue'),
+                    component: () => import(/* webpackChunkName: "user" */ '../routes/passport/shared/UserFrom.vue'),
                     meta: { title: '用户信息' }
+                },
+                {
+                    //班课信息
+                    path: '/class',
+                    component: () => import(/* webpackChunkName: "class" */ '../routes/passport/shared/ClassFrom.vue'),
+                    meta: { title: '班课信息' }
                 },
                 {
                     //个人消息
