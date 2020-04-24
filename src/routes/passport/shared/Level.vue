@@ -1,5 +1,5 @@
 <template>
-    <div id="limit">  
+    <div>  
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-rank"></i> 等级设置</el-breadcrumb-item>

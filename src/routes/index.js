@@ -20,6 +20,11 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
+                    path: '/datadictionary',
+                    component: () => import(/* webpackChunkName: "datadictionary" */ '../routes/passport/shared/DataDictionary.vue'),
+                    meta: { title: '数据字典' }
+                },
+                {
                     //用户信息
                     path: '/user',
                     component: () => import(/* webpackChunkName: "user" */ '../routes/passport/shared/UserFrom.vue'),

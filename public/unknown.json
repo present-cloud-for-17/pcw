@@ -1,0 +1,39 @@
+{
+    "list": [{
+            "id":1,
+            "username":"job_status",
+            "password":"测试数据",
+            "state": "true",
+            "level":3
+        },
+        {
+            "id":2,
+            "username":"user_status",
+            "password":"用户状态",
+            "state": "false",
+            "level":2
+        },
+        {
+            "id":3,
+            "username":"teacher_status",
+            "password":"教师状态",
+            "state": "true",
+            "level":1
+        },
+        {
+            "id":4,
+            "username":"student_status",
+            "password":"学生状态",
+            "state": "true",
+            "level":1
+        },
+        {
+            "id":5,
+            "username":"admin_status",
+            "password":"管理员状态",
+            "state": "false",
+            "level":1
+        }
+    ],
+    "pageTotal": 5
+}

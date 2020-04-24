@@ -106,8 +106,18 @@ export default {
                 {
                     icon: 'el-icon-lx-warn',
                     index: 'level',
-                    title: '等级设置',
-                    unknown:'teacher'
+                    title: '高级权限',
+                    unknown:'teacher',
+                    subs: [
+                        {
+                            index: 'level',
+                            title: '等级设置'
+                        },
+                        {
+                            index: 'datadictionary',
+                            title: '数据字典'
+                        }
+                    ]
                 },
                 {
                     icon: 'el-icon-lx-global',
