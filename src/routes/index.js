@@ -31,6 +31,12 @@ export default new Router({
                     meta: { title: '用户信息' }
                 },
                 {
+                    //角色信息
+                    path: '/role',
+                    component: () => import(/* webpackChunkName: "user" */ '../routes/passport/shared/RoleFrom.vue'),
+                    meta: { title: '角色信息' }
+                },
+                {
                     //班课信息
                     path: '/class',
                     component: () => import(/* webpackChunkName: "class" */ '../routes/passport/shared/ClassFrom.vue'),
@@ -41,6 +47,12 @@ export default new Router({
                     path: '/tabs',
                     component: () => import(/* webpackChunkName: "tabs" */ '../routes/passport/shared/Tabs.vue'),
                     meta: { title: '个人消息' }
+                },
+                {
+                    //参数设置
+                    path: '/set',
+                    component: () => import(/* webpackChunkName: "tabs" */ '../routes/passport/shared/SetParameter.vue'),
+                    meta: { title: '参数设置' }
                 },
                 {
                     // 使用说明

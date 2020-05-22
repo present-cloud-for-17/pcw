@@ -77,6 +77,12 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-calendar',
+                    index: 'role',
+                    title: '角色信息',
+                    unknown:'teacher'
+                },
+                {
+                    icon: 'el-icon-lx-calendar',
                     index: 'class',
                     title: '班课信息',
                     unknown:'admin'
@@ -85,6 +91,12 @@ export default {
                     icon: 'el-icon-lx-copy',
                     index: 'tabs',
                     title: '个人消息',
+                    unknown:'admin'
+                },
+                {
+                    icon: 'el-icon-lx-copy',
+                    index: 'set',
+                    title: '参数设置',
                     unknown:'true'
                 },
                 {

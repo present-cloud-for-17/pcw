@@ -1,6 +1,6 @@
 {
     "list": [{
-            "id":1,
+            "uId":1,
             "username":"admin",
             "password":"123456",
             "level":3

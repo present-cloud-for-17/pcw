@@ -1,0 +1,25 @@
+{
+    "list": [{
+            "id": 1,
+            "name": "老师",
+            "identifier": 190327900,
+            "state": "基础功能",
+            "state2": "用户管理",
+            "a":true,
+            "b":true,
+            "c":false,
+            "exp":"无",
+            "thumb": "https://lin-xin.gitee.io/images/post/wms.png"
+        },
+        {
+            "id": 2,
+            "name": "学生",
+            "identifier": 190327901,
+            "state": "基础功能",
+            "state2": "个人消息",
+            "exp":"无",
+            "thumb": "https://lin-xin.gitee.io/images/post/node3.png"
+        }
+    ],
+    "pageTotal": 2
+}

@@ -9,16 +9,16 @@
             <div class="ms-login">
             <div class="ms-title">云到后端管理系统</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
-                <el-form-item prop="username">
-                    <el-input v-model="param.username" placeholder="请输入用户名">
+                <el-form-item prop="loginToken">
+                    <el-input v-model="param.loginToken" placeholder="请输入用户名">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
-                <el-form-item prop="password">
+                <el-form-item prop="passwordToken">
                     <el-input
                         type="password"
                         placeholder="请输入密码"
-                        v-model="param.password"
+                        v-model="param.passwordToken"
                         @keyup.enter.native="submitForm()"
                     >
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
@@ -39,26 +39,55 @@
 </template>
 
 <script>
+import { subData } from '../../../core/index_login';
+import { fetchData } from '../../../core/index';
+import request from '../../../shared/components/request';
+
 export default {
     data: function() {
         return {
             param: {
-                username: '',
-                password: '',
+                loginToken: '',
+                passwordToken: ''
             },
+            query:{
+                loginToken: 'admin',
+                passwordToken: '123456',
+                loginType:'web'
+            },
+            test:{},
             rules: {
-                username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-                password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+                loginToken: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+                passwordToken: [{ required: true, message: '请输入密码', trigger: 'blur' }],
             },
+
         };
     },
     methods: {
         submitForm() {
+            //this.param.token ="0abcd01";
+            // this.axios.get('api/userVerification/login.do',this.query)
+            //     .then(res =>{
+            //             console.log(res)
+            //     });
+
+            this.songData();
             this.$refs.login.validate(valid => {
                 if (valid) {
-                    this.$message.success('登录成功');
-                    localStorage.setItem('ms_username', this.param.username);
-                    this.$router.push('/');
+
+                    if(1){
+                        this.$message.success('登录成功');
+                        localStorage.setItem('ms_username', this.param.loginToken);
+
+                        //需要从后端获取一个初始token，待完善
+                        //localStorage.setItem('ms_token', this.param.token);
+                        this.$router.push('/');
+                    } else{
+                        this.$message.error('账号或密码错误');
+                        console.log('error submit!!');
+                        return false;
+                    }
+                    
                 } else {
                     this.$message.error('请输入账号和密码');
                     console.log('error submit!!');
@@ -71,7 +100,17 @@ export default {
         },
         forgetpassward(){
             this.$router.push('/forgetpassword');
-        }
+        },
+        getData() {
+            fetchData(this.test).then(res => {
+                console.log(res);
+            });
+        },
+        songData() {
+            subData(this.query).then(res => {
+                console.log(res);
+            });
+        },
     },
 };
 </script>

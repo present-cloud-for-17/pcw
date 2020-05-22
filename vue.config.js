@@ -14,7 +14,19 @@ module.exports = {
 	    	}
 	    }
     },
-
+	
+	devServer: {
+		proxy: {
+			'/api': {
+				target: 'http://175.24.88.62:8080/pcs',
+				ws: true,
+				changeOrigin: true,
+				pathRewrite: {
+					'^/api': ''
+				}
+			}
+		}
+	},
     publicPath: './',
     assetsDir: 'static',
     productionSourceMap: false,

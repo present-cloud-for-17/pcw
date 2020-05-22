@@ -1,33 +1,22 @@
 <template>
-    <div>
+    <div id="limit">
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 用户信息
+                    <i class="el-icon-lx-cascades"></i> 角色信息
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         
         <div class="container">
             <div class="handle-box">
-                <el-button
-                    type="primary"
-                    icon="el-icon-delete"
-                    @click="delAllSelection"
-                >批量删除</el-button>
-
                 <el-button 
                 type="success" 
                 icon="el-icon-plus" 
                 class="handle-add mr10" 
-                @click="handleAdd">新增用户</el-button>
+                @click="handleAdd">新增角色</el-button>
 
-                <el-select v-model="query.major" placeholder="专业" class="handle-select mr10">
-                    <el-option key="1" label="教师" value="教师"></el-option>
-                    <el-option key="2" label="学生" value="学生"></el-option>
-                    <el-option key="3" label="未知" value="未知"></el-option>
-                </el-select>
-                <el-input v-model="query.uName" placeholder="用户名" class="handle-input mr10"></el-input>
+                <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
 
@@ -41,36 +30,22 @@
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
-                <el-table-column prop="uName" label="用户名"></el-table-column>
+                <el-table-column prop="name" label="角色名" width="200"></el-table-column>              
 
-                <el-table-column label="用户编号">
-                    <template slot-scope="scope">{{scope.row.uNumber}}</template>
-                </el-table-column>
-
-                <!-- <el-table-column label="头像(查看大图)" align="center">
-                    <template slot-scope="scope">
-                        <el-image
-                            class="table-td-thumb"
-                            :src="scope.row.thumb"
-                            :preview-src-list="[scope.row.thumb]"
-                        ></el-image>
-                    </template>
-                </el-table-column> -->
-                
-                <el-table-column prop="school" label="学校"></el-table-column>
-                <el-table-column prop="college" label="院系"></el-table-column>
-                <el-table-column prop="major" label="专业"></el-table-column>
-
-                <el-table-column label="身份" align="center">
+                <el-table-column label="权限" align="center">
                     <template slot-scope="scope">
                         <el-tag
-                            :type="scope.row.status===0?'success':(scope.row.status===2?'danger':'')"
-                        >{{scope.row.status}}</el-tag>
+                            :type="scope.row.state==='教师'?'success':(scope.row.state==='未知'?'danger':'')"
+                        >{{scope.row.state}}</el-tag>
+                        
+                        <el-tag
+                            :type="scope.row.state2==='个人消息'?'success':(scope.row.state2==='未知'?'danger':'')" class="handle-add mr10"
+                        >{{scope.row.state2}}</el-tag>
                     </template>
                 </el-table-column>
                 
-                <el-table-column prop="exp" label="经验值" width="55" align="center"></el-table-column>
-                <!-- <el-table-column prop="date" label="注册时间"></el-table-column> -->
+                
+                <el-table-column prop="exp" label="备注"></el-table-column>
 
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
@@ -78,7 +53,7 @@
                             type="text"
                             icon="el-icon-edit"
                             @click="handleEdit(scope.$index, scope.row)"
-                        >编辑</el-button>
+                        >权限修改</el-button>
                         <el-button
                             type="text"
                             icon="el-icon-delete"
@@ -106,18 +81,19 @@
         <el-dialog  id="limit" title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
                 
-                <el-form-item label="用户名">
-                    <el-input v-model="form.uName"></el-input>
+                <el-form-item label="角色名">
+                    <el-input v-model="form.name"></el-input>
                 </el-form-item>
-                <el-form-item label="学校">
-                    <el-input v-model="form.school"></el-input>
+                <el-form-item label="基础功能">
+                    <el-switch v-model="form.a"></el-switch>
+                </el-form-item> 
+                <el-form-item label="用户管理">
+                    <el-switch v-model="form.b"></el-switch>
                 </el-form-item>
-                <el-form-item label="院系">
-                    <el-input v-model="form.college"></el-input>
+                <el-form-item label="个人消息">
+                    <el-switch v-model="form.c"></el-switch>
                 </el-form-item>
-                <el-form-item label="专业">
-                    <el-input v-model="form.major"></el-input>
-                </el-form-item>
+                
 
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -129,45 +105,27 @@
         <!-- 新增弹出框 -->
         <el-dialog id="limit" title="新增用户" :visible.sync="addVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
-                    <el-form-item label="用户名">
-                        <el-input v-model="formadd.uName"></el-input>
+              
+                <el-form ref="form" :model="form" label-width="70px">
+                    <el-form-item label="新增角色">
+                        <el-input v-model="formadd.name"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="编号">
-                        <el-input v-model="form.uNumber"></el-input>
+                    <el-form-item label="基础功能">
+                        <el-switch v-model="formadd.a"></el-switch>
+                    </el-form-item> 
+                    <el-form-item label="用户管理">
+                        <el-switch v-model="formadd.b"></el-switch>
                     </el-form-item>
-
-                    <el-form-item label="院系">
-                        <el-select v-model="formadd.college" placeholder="请选择院系" class="handle-select mr10">
-                            <el-option key="1" label="数计学院" value="数计学院"></el-option>
-                            <el-option key="2" label="法学院" value="法学院"></el-option>
-                            <el-option key="3" label="生工学院" value="生工学院"></el-option>
-                        </el-select>
+                    <el-form-item label="个人消息">
+                        <el-switch v-model="formadd.c"></el-switch>
                     </el-form-item>
-
-                    <el-form-item label="专业">
-                        <el-select v-model="formadd.major" placeholder="请选择专业" class="handle-select mr10">
-                            <el-option key="1" label="计算机技术" value="计算机技术"></el-option>
-                            <el-option key="2" label="软件工程" value="软件工程"></el-option>
-                        </el-select>
-                    </el-form-item>
-
-                    <!-- <el-form-item label="是否教师">
-                        <el-switch v-model="form.delivery"></el-switch>
-                    </el-form-item>  -->
-
-                    <el-form-item label="身份">
-                        <el-radio-group v-model="formadd.state">
-                            <el-radio label="教师"></el-radio>
-                            <el-radio label="学生"></el-radio>
-                        </el-radio-group>
+            
+                    <el-form-item label="备注">
+                        <el-input type="textarea" rows="5" v-model="formadd.exp"></el-input>
                     </el-form-item>
                     
-                    <!-- <el-form-item label="备注">
-                        <el-input type="textarea" rows="5" v-model="form.desc"></el-input>
-                    </el-form-item> -->
-                    
-               
+                </el-form>
             </el-form>
             
             <span slot="footer" class="dialog-footer">
@@ -180,12 +138,18 @@
 </template>
 
 <script>
-import { fetchData } from '../../../core/index';
+import { fetchData } from '../../../core/index_role';
 export default {
-    name: 'userfrom',
+    name: 'rolefrom',
     data() {
         return {
             query: {
+                major: '',
+                test:'',
+                name: '',
+                id:1,
+                pageIndex: 1,
+                pageSize: 10
             },
             tableData: [],
             multipleSelection: [],
@@ -207,8 +171,8 @@ export default {
         getData() {
             fetchData(this.query).then(res => {
                 console.log(res);
-                this.tableData = res;
-                this.pageTotal = 4;
+                this.tableData = res.list;
+                this.pageTotal = res.pageTotal || 50;
             });
         },
         // 触发搜索按钮
@@ -237,7 +201,7 @@ export default {
             let str = '';
             this.delList = this.delList.concat(this.multipleSelection);
             for (let i = 0; i < length; i++) {
-                str += this.multipleSelection[i].uName + ' ';
+                str += this.multipleSelection[i].name + ' ';
             }
             this.$message.error(`删除了${str}`);
             this.multipleSelection = [];
@@ -249,9 +213,8 @@ export default {
         saveAdd(tableData,event) {
             this.addVisible = false;
             this.$message.success(`新增成功`);
-            this.formadd.identifier = 190327055;
-            this.formadd.school = "福州大学";
-            this.formadd.exp = 0;
+            this.formadd.state = "基础功能";
+            this.formadd.state2 = "个人消息";
             this.tableData.push(this.formadd);
         },
         // 编辑操作
@@ -264,6 +227,7 @@ export default {
         saveEdit() {
             this.editVisible = false;
             this.$message.success(`修改第 ${this.idx + 1} 行成功`);
+            this.form.state2="个人消息";
             this.$set(this.tableData, this.idx, this.form);
         },
         // 分页导航

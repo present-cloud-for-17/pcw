@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './routes';
 import ElementUI from 'element-ui';
 import VueI18n from 'vue-i18n';
+
 import { messages } from './layout/default/i18n';
 import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 // import './shared/components/assets/css/theme-green/index.css'; // 浅绿色主题
@@ -22,10 +23,18 @@ const i18n = new VueI18n({
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | pcw`;
-    const role = localStorage.getItem('ms_username');
-    if (!role && to.path !== '/login' && to.path !== '/register' && to.path !== '/forgetpassword') {
+    document.title = `${to.meta.title}`;
+    const user = localStorage.getItem('ms_username');//判断是否为用户
+    const secret = 1;//为token验证提供判断，每次判断前需向端发送验证请求，返回判断结果，待完善
+
+    if (secret !== 1 && to.path !== '/login' && to.path !== '/register' && to.path !== '/forgetpassword') {
+        //无token情况
         next('/login');
+        document.title = '登录';
+    } else if(!user && to.path !== '/login' && to.path !== '/register' && to.path !== '/forgetpassword') {
+        //有token非用户情况
+        next('/login');
+        document.title = '登录';
     } else if (to.meta.permission) {
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
         role === 'admin' ? next() : next('/403');
@@ -39,6 +48,7 @@ router.beforeEach((to, from, next) => {
             next();
         }
     }
+
 });
 
 new Vue({
