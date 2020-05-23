@@ -10,10 +10,10 @@ import request from '../shared/components/request';
       });
   };
 
-//  export const subData = query => {
-//      return request({
-//         url: '/api/user/findAll.do',  
-//         method: 'get',
-//         params: query
-//      });
-//  };
+  export const fetchData = query => {
+      return request({
+         url: '/api/login/findAll.do',  
+         method: 'get',
+         params: query
+      });
+  };

@@ -47,7 +47,8 @@ export default {
         return {
             param: {
                 loginToken: '',
-                passwordToken: ''
+                passwordToken: '',
+                token:''
             },
             query:{
                 loginToken: 'admin',
@@ -73,13 +74,15 @@ export default {
             this.songData();
             this.$refs.login.validate(valid => {
                 if (valid) {
-
-                    if(1){
+                    this.getData();
+                    if(test.flag !== 0){
                         this.$message.success('登录成功');
                         localStorage.setItem('ms_username', this.param.loginToken);
 
-                        //需要从后端获取一个初始token，待完善
-                        //localStorage.setItem('ms_token', this.param.token);
+                        //需要从后端获取一个初始token
+                        localStorage.setItem('ms_token', this.param.token);
+                        
+
                         this.$router.push('/');
                     } else{
                         this.$message.error('账号或密码错误');
@@ -103,6 +106,7 @@ export default {
         getData() {
             fetchData(this.test).then(res => {
                 console.log(res);
+                this.test = res;
             });
         },
         songData() {
