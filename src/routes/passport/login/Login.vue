@@ -41,7 +41,6 @@
 <script>
 import { subData } from '../../../core/index_login';
 import { fetchData } from '../../../core/index';
-import request from '../../../shared/components/request';
 
 export default {
     data: function() {
