@@ -1,25 +1,36 @@
 {
     "list": [{
             "id": 1,
-            "name": "老师",
-            "identifier": 190327900,
-            "state": "基础功能",
-            "state2": "用户管理",
-            "a":true,
-            "b":true,
-            "c":false,
-            "exp":"无",
-            "thumb": "https://lin-xin.gitee.io/images/post/wms.png"
+            "name": "管理员",
+            "a":"true",
+            "b":"true",
+            "c":"true",
+            "d":"true"
         },
         {
             "id": 2,
+            "name": "教师",
+            "a":"false",
+            "b":"false",
+            "c":"true",
+            "d":"true"
+        },
+        {
+            "id": 3,
             "name": "学生",
-            "identifier": 190327901,
-            "state": "基础功能",
-            "state2": "个人消息",
-            "exp":"无",
-            "thumb": "https://lin-xin.gitee.io/images/post/node3.png"
+            "a":"false",
+            "b":"false",
+            "c":"true",
+            "d":"true"
+        },
+        {
+            "id": 4,
+            "name": "班长",
+            "a":"false",
+            "b":"false",
+            "c":"true",
+            "d":"true"
         }
     ],
-    "pageTotal": 2
+    "pageTotal": 4
 }

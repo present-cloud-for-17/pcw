@@ -40,7 +40,7 @@ export default new Router({
                     //班课信息
                     path: '/class',
                     component: () => import(/* webpackChunkName: "class" */ '../routes/passport/shared/ClassFrom.vue'),
-                    meta: { title: '班课信息' }
+                    meta: { title: '个人班课' }
                 },
                 {
                     //个人消息
@@ -49,10 +49,16 @@ export default new Router({
                     meta: { title: '个人消息' }
                 },
                 {
+                    //院校信息
+                    path: '/college',
+                    component: () => import(/* webpackChunkName: "tabs" */ '../routes/passport/shared/College.vue'),
+                    meta: { title: '院校信息' }
+                },
+                {
                     //参数设置
                     path: '/set',
                     component: () => import(/* webpackChunkName: "tabs" */ '../routes/passport/shared/SetParameter.vue'),
-                    meta: { title: '参数设置' }
+                    meta: { title: '参数设置', permission: true}
                 },
                 {
                     // 使用说明
@@ -79,7 +85,7 @@ export default new Router({
                 {
                     path: '/level',
                     component: () => import(/* webpackChunkName: "Level" */ '../routes/passport/shared/Level.vue'),
-                    meta: { title: '等级设置', permission: true }
+                    meta: { title: '班课信息' }
                 }
             ]
         },
@@ -92,6 +98,11 @@ export default new Router({
             path: '/register',
             component: () => import(/* webpackChunkName: "register" */ '../routes/passport/register/Register.vue'),
             meta: { title: '注册' }
+        },
+        {
+            path: '/registerfinal',
+            component: () => import(/* webpackChunkName: "register" */ '../routes/passport/register/Registerfinal.vue'),
+            meta: { title: '完善用户信息' }
         },
         {
             path: '/forgetPassword',

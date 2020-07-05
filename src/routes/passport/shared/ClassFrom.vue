@@ -1,5 +1,5 @@
 <template>
-    <div id="limit">
+    <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
@@ -10,21 +10,20 @@
         
         <div class="container">
             <div class="handle-box">
-
                 <el-button 
-                type="success" 
+                type="info" 
                 icon="el-icon-plus" 
-                @click="handleAdd">新增学生</el-button>
+                class="handle-add mr10" 
+                @click="handleAddclock">新增班课</el-button>
 
-                <el-button
-                    type="primary"
-                    icon="el-icon-delete"
-                    class="handle-add mr10"
-                    @click="delAllSelection"
-                >发布签到</el-button>
-
-                <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
+                <!-- <el-select v-model="query.major" placeholder="查找类别" class="handle-select mr10">
+                    <el-option key="1" label="院校" value="院校"></el-option>
+                    <el-option key="2" label="ID" value="ID"></el-option>
+                    <el-option key="3" label="班课名" value="班课名"></el-option>
+                </el-select> -->
+                <el-input v-model="query.uName" placeholder="请输入完整班课名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+                <el-button type="primary" icon="el-icon-setting" @click="getData()">重置</el-button>
             </div>
 
             <el-table
@@ -35,39 +34,18 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                   
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-                <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
-                <el-table-column prop="name" label="用户名"></el-table-column>
+                <el-table-column prop="cNumber" label="班课ID" width="100" align="center"></el-table-column>
+                <el-table-column prop="cName" align="center" label="班课名"></el-table-column>
 
-                <el-table-column label="用户编号">
-                    <template slot-scope="scope">{{scope.row.identifier}}</template>
-                </el-table-column>
-
-                <el-table-column label="头像(查看大图)" align="center">
-                    <template slot-scope="scope">
-                        <el-image
-                            class="table-td-thumb"
-                            :src="scope.row.thumb"
-                            :preview-src-list="[scope.row.thumb]"
-                        ></el-image>
-                    </template>
+                <el-table-column width="55" align="center" label="学分">
+                    <template slot-scope="scope">{{scope.row.credit}}</template>
                 </el-table-column>
                 
-                <el-table-column prop="school" label="学校"></el-table-column>
-                <el-table-column prop="college" label="院系"></el-table-column>
-                <el-table-column prop="major" label="专业"></el-table-column>
-
-                <el-table-column label="身份" align="center">
-                    <template slot-scope="scope">
-                        <el-tag
-                            :type="scope.row.state==='教师'?'success':(scope.row.state==='未知'?'danger':'')"
-                        >{{scope.row.state}}</el-tag>
-                    </template>
-                </el-table-column>
+                <el-table-column prop="date" width="55" align="center" label="学时"></el-table-column>
+                <el-table-column prop="peName" align="center" label="所属教师"></el-table-column>
                 
-                <el-table-column prop="exp" label="经验值" width="55" align="center"></el-table-column>
-                <!-- <el-table-column prop="date" label="注册时间"></el-table-column> -->
+                <el-table-column prop="description" label="备注" align="center"></el-table-column>
 
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
@@ -103,17 +81,17 @@
         <el-dialog  id="limit" title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
                 
-                <el-form-item label="用户名">
-                    <el-input v-model="form.name"></el-input>
+                <el-form-item label="班课名">
+                    <el-input v-model="form.cName"></el-input>
                 </el-form-item>
-                <el-form-item label="学校">
-                    <el-input v-model="form.school"></el-input>
+                <el-form-item label="学时">
+                    <el-input v-model="form.date"></el-input>
                 </el-form-item>
-                <el-form-item label="院系">
-                    <el-input v-model="form.college"></el-input>
+                <el-form-item label="学分">
+                    <el-input v-model="form.credit"></el-input>
                 </el-form-item>
-                <el-form-item label="专业">
-                    <el-input v-model="form.major"></el-input>
+                <el-form-item label="备注">
+                    <el-input v-model="form.description"></el-input>
                 </el-form-item>
 
             </el-form>
@@ -124,33 +102,34 @@
         </el-dialog>
         
         <!-- 新增弹出框 -->
-        <el-dialog id="limit" title="新增用户" :visible.sync="addVisible" width="50%">
+        <el-dialog title="新增班课" :visible.sync="addVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
-              
-                <el-form ref="form" :model="form" label-width="70px">
-                    <el-form-item label="用户名">
-                        <el-input v-model="form.name"></el-input>
+                    <el-form-item label="班课名">
+                        <el-input v-model="formadd.cName"></el-input>
                     </el-form-item>
-                    
-                    <el-form-item label="权限">
-                        <el-switch v-model="form.delivery"></el-switch>
+
+                    <el-form-item label="班课ID">
+                        <el-input v-model="formadd.cNumber"></el-input>
                     </el-form-item>
-                    
+
+                    <el-form-item label="学分">
+                        <el-input v-model="formadd.credit"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="学时">
+                        <el-input v-model="formadd.date"></el-input>
+                    </el-form-item>
+
                     <el-form-item label="备注">
-                        <el-input type="textarea" rows="5" v-model="form.desc"></el-input>
+                        <el-input type="textarea" rows="5" v-model="formadd.description"></el-input>
                     </el-form-item>
                     
-                    <el-form-item>
-                        <el-button type="primary" @click="onSubmit">确认</el-button>
-                        <el-button>取消</el-button>
-                    </el-form-item>
-                
-                </el-form>
+               
             </el-form>
             
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveAdd">确 定</el-button>
+                <el-button type="primary" @click="saveAdd(tableData)">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -158,26 +137,40 @@
 </template>
 
 <script>
-import { fetchData } from '../../../core/index';
+import { fetchCourseData, ModifyCourseData, AddCourseData, SearchCourseData, DelCourseData } from '../../../core/index_course';
+import { fetchPersonData, fetchCoursePData } from '../../../core/index_course';
 export default {
     name: 'userfrom',
     data() {
         return {
             query: {
-                major: '',
-                name: '',
-                pageIndex: 1,
-                pageSize: 10
+                cName:""
             },
+            temp:{
+            },
+            tempsa:{
+                uId:38,
+            },
+            temps:[],
             tableData: [],
+            tableData2: [],
+            tableData3: [],
             multipleSelection: [],
             delList: [],
             addVisible: false,
             editVisible: false,
             pageTotal: 0,
             form: {},
+            formadd:{
+                peId:'ms_userpeid'
+            },
             idx: -1,
             id: -1
+        }
+    },
+    computed: {
+        Cteacher(){
+            
         }
     },
     created() {
@@ -186,17 +179,23 @@ export default {
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-            fetchData(this.query).then(res => {
-                console.log(res);
-                this.tableData = res.list;
-                this.tableData = tableData.filter(res => res.list.state==='教师');
-                this.pageTotal = res.pageTotal || 50;
+            fetchCourseData(this.query).then(res => {
+                this.tableData = res;
+                this.pageTotal = this.tableData.length;
+                console.log(res);               
             });
+            this.query.cName = "";
+            
+        },
+        handleAddclock(){
+            this.$message.error('该功能请使用教师身份执行！');
         },
         // 触发搜索按钮
         handleSearch() {
-            this.$set(this.query, 'pageIndex', 1);
-            this.getData();
+            const testN =this.query.cName;
+            this.tableData = this.tableData.filter(function(item){
+                return item.cName === testN;
+            })
         },
         // 删除操作
         handleDelete(index, row) {
@@ -205,8 +204,23 @@ export default {
                 type: 'warning'
             })
                 .then(() => {
-                    this.$message.success('删除成功');
-                    this.tableData.splice(index, 1);
+                    if(this.tableData.length > 1){
+                        delete row.peId;
+                        this.temp = row;
+                        console.log(this.temp);
+                        DelCourseData(this.temp).then(res => {
+                            if(res == 1){
+                                this.$message.success('删除成功');
+                                this.tableData.splice(index, 1);
+                            }else{
+                                this.$message.error('删除失败，请通知管理员！');
+                            }
+                            
+                        })
+                    }else{
+                        this.$message.error('数据库内至少需要保留一条信息！');
+                    }
+                   
                 })
                 .catch(() => {});
         },
@@ -219,14 +233,28 @@ export default {
             let str = '';
             this.delList = this.delList.concat(this.multipleSelection);
             for (let i = 0; i < length; i++) {
-                str += this.multipleSelection[i].name + ' ';
+                str += this.multipleSelection[i].uName + ' ';
             }
-            this.$message.success(`发布了${str}`);
+            this.$message.error(`删除了${str}`);
             this.multipleSelection = [];
         },
         // 新增用户
         handleAdd() {
             this.addVisible = true;
+        },
+
+        //新增操作
+        saveAdd(tableData,event) {
+            this.addVisible = false;
+            this.$message.success(`新增成功`);
+            this.formadd.term = "2020-12";
+            this.formadd.peId = localStorage.getItem('ms_userpeid');
+            this.formadd.dailyWeight = 0.5;
+            this.formadd.finalWeight = 0.5;
+            AddCourseData(this.formadd);
+            this.formadd.peName = localStorage.getItem('ms_username');
+            console.log(this.formadd);
+            this.tableData.push(this.formadd);
         },
         // 编辑操作
         handleEdit(index, row) {
@@ -238,7 +266,8 @@ export default {
         saveEdit() {
             this.editVisible = false;
             this.$message.success(`修改第 ${this.idx + 1} 行成功`);
-            this.$set(this.tableData, this.idx, this.form);
+            this.temp = this.form;
+            ModifyCourseData(this.temp);
         },
         // 分页导航
         handlePageChange(val) {

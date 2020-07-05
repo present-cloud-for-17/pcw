@@ -10,13 +10,10 @@
         <div class="container">
             <div class="handle-box">
                 <el-button 
-                type="success" 
+                type="warning" 
                 icon="el-icon-plus" 
                 class="handle-add mr10" 
                 @click="handleAdd">新增字典</el-button>
-
-                <el-input v-model="query.name" placeholder="字典名称" clearable maxlength="2000" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
 
             <el-table
@@ -24,24 +21,14 @@
                 border
                 class="table"
                 ref="multipleTable"
-                v-loading="TableLoading"
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-                <el-table-column prop="id" label="编号" width="55" align="center"></el-table-column>
+                <el-table-column prop="dId" label="编号" width="55" align="center"></el-table-column>
 
-                <el-table-column prop="username" width="200" label="名称"></el-table-column>
-
-                <el-table-column label="是否启动" align="center" width="100">
-                    <template slot-scope="scope">
-                        <el-tag
-                            :type="scope.row.state==='是'?'success':(scope.row.state==='false'?'danger':'')"
-                        >{{scope.row.state}}</el-tag>
-                    </template>
-                </el-table-column>
-
-                <el-table-column prop="password" label="备注"></el-table-column>
+                <el-table-column prop="chineseName" align="center" label="中文名"></el-table-column>
+                <el-table-column prop="englishName" align="center" label="英文名"></el-table-column>
 
 
                 <el-table-column label="操作" width="180" align="center">
@@ -88,21 +75,20 @@
                     type="primary" 
                     icon="el-icon-plus" 
                     class="handle-add mr10" 
-                    @click="handleAdd">新增详情</el-button>
+                    @click="handleAddT">新增详情</el-button>
             </div>
 
             <el-table
-                :data="tableData2"
+                :data="tableData3"
                 border
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="id" label="编号" width="55" align="center"></el-table-column>
-                <el-table-column prop="name"  label="名称"></el-table-column>
-                <el-table-column prop="password" label="备注"></el-table-column>
-
+                <el-table-column prop="ddId" label="编号" width="55" align="center"></el-table-column>
+                <el-table-column prop="dId" label="所属" width="55" align="center"></el-table-column>
+                <el-table-column prop="ddName"  label="名称"></el-table-column>
 
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
@@ -110,21 +96,49 @@
                         <el-button
                             type="text"
                             icon="el-icon-edit"
-                            @click="handleEdit(scope.$index, scope.row)"
-                        >编辑</el-button>
+                            @click="handleEdit2(scope.$index, scope.row)"
+                        >编辑名称</el-button>
 
                         <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
-                            @click="handleDelete(scope.$index, scope.row)"
+                            @click="handleDelete2(scope.$index, scope.row)"
                         >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
+                <el-button @click="detVisible = false">取 消</el-button>
+                <el-button type="primary" @click="detVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <!-- 详情新增弹出框 -->
+        <el-dialog  title="新增详情" :visible.sync="addVisible2" width="30%">
+            <el-form ref="form" :model="formaddd" label-width="70px">
+                
+                <el-form-item label="名称">
+                    <el-input v-model="formaddd.ddName"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="addVisible2 = false">取 消</el-button>
+                <el-button type="primary" @click="saveADDD">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <!-- 详情编辑弹出框 -->
+        <el-dialog  title="编辑名称" :visible.sync="editVisible2" width="30%">
+            <el-form ref="form" :model="formdet" label-width="70px">
+                
+                <el-form-item label="名称">
+                    <el-input v-model="formdet.ddName"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="editVisible2 = false">取 消</el-button>
+                <el-button type="primary" @click="saveEditD">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -132,11 +146,11 @@
         <el-dialog  id="limit" title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
                 
-                <el-form-item label="字典名称">
-                    <el-input v-model="form.username"></el-input>
+                <el-form-item label="中文名">
+                    <el-input v-model="form.chineseName"></el-input>
                 </el-form-item>
-                <el-form-item label="备注">
-                    <el-input v-model="form.password"></el-input>
+                <el-form-item label="英文名">
+                    <el-input v-model="form.englishName"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -148,17 +162,17 @@
         <!-- 新增弹出框 -->
         <el-dialog id="limit" title="新增字典" :visible.sync="addVisible" width="30%">
             <el-form ref="form" :model="formadd" label-width="70px">  
-                <el-form-item label="字典名称">
-                    <el-input v-model="formadd.username"></el-input>
+                <el-form-item label="中文名">
+                    <el-input v-model="formadd.chineseName"></el-input>
                 </el-form-item>
-                
-                <el-form-item label="是否启用">
-                    <el-switch v-model="formadd.state"></el-switch>
-                </el-form-item>
-            
-                <el-form-item label="备注">
-                    <el-input type="textarea" rows="5" v-model="formadd.password"></el-input>
-                </el-form-item>       
+
+                <el-form-item label="英文名">
+                    <el-input v-model="formadd.englishName"></el-input>
+                </el-form-item>   
+
+                <el-form-item label="字典项1">
+                    <el-input v-model="formaddetail.ddName"></el-input>
+                </el-form-item> 
             </el-form>
             
             <span slot="footer" class="dialog-footer">
@@ -170,8 +184,7 @@
 </template>
 
 <script>
-import { fetchData } from '../../../core/index_unknown';
-import { fetchData2 } from '../../../core/index';
+import { fetchDictData, fetchDictDetaData, ModifyDictData, AddDictData, SearchDictData, DelDictData, fetchDictSubData, ModifyDictDeData, AddDictSubData, DelDictDeData } from '../../../core/index_dictionary';
 export default {
     name: 'userfrom',
     data() {
@@ -195,36 +208,38 @@ export default {
             multipleSelection: [],
             delList: [],
             addVisible: false,
+            addVisible2: false,
             editVisible: false,
+            editVisible2: false,
             detVisible:false,
             pageTotal: 0,
             pageTotal2: 0,
+            tableData3:[],
             form: {},
-            formadd: {id:6},
+            formdet:{},
+            formadd: {},
+            formaddetail:{
+                dId:'',
+                ddName:''
+            },
+            formaddd: {},
             idx: -1,
-            id: -1
+            id: -1,
+            decId:0
         }
     },
 
     created() {
         this.getData();
-        //this.getData2();
     },
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-            fetchData(this.query).then(res => {
-                console.log(res);
-                this.tableData = res.list;
-                this.pageTotal = res.pageTotal || 50;
-            });
-        },
-        // 获取 easy-mock 的模拟数据
-        getData2() {
-            fetchData2(this.query).then(res => {
-                console.log(res);
-                this.tableData2 = res.list;
-                this.pageTotal2 = res.pageTotal || 50;
+            fetchDictData(this.query).then(res => {
+                this.tableData = res;
+                this.pageTotal = res.length;
+                this.formaddetail.dId = this.tableData[0].dId + 1;
+                console.log(this.formaddetail.dId);
             });
         },
         // 触发搜索按钮
@@ -234,19 +249,40 @@ export default {
                 "username":"job_status",
                 "password":"测试数据",
                 "state": "true",
-                "level":3
             }]
         },
-
         // 删除操作
         handleDelete(index, row) {
             // 二次确认删除
-            this.$confirm('确定要删除吗？', '提示', {
+            this.$confirm('确定要删除该字典吗？', '提示', {
                 type: 'warning'
             })
                 .then(() => {
+                    fetchDictSubData(row).then(res => {
+                        if(res.length != 0){
+                            this.$message.error('无法删除非空数据字典！');
+                        }else{
+                            this.form = row;
+                            DelDictData(this.form);
+                            this.getData();
+                            this.$message.success('字典删除成功！');
+                    }     
+                    })
+                                
+                })
+                .catch(() => {});
+        },
+        //删除详情操作
+        handleDelete2(index, row) {
+            // 二次确认删除
+            this.$confirm('确定要删除该字典项吗？', '提示', {
+                type: 'warning'
+            })
+                .then(() => {
+                    //this.$message.error('无法删除默认字典项！');
                     this.$message.success('删除成功');
-                    this.tableData.splice(index, 1);
+                    this.detVisible = false;
+                    DelDictDeData(row);
                 })
                 .catch(() => {});
         },
@@ -269,6 +305,16 @@ export default {
         handleAdd() {
             this.addVisible = true;
         },
+        //新增详情
+        handleAddT() {
+            this.addVisible2 = true;
+        },
+        // 编辑操作
+        handleEdit2(index, row) {
+            this.idx = index;
+            this.formdet = row;
+            this.editVisible2 = true;
+        },
         // 编辑操作
         handleEdit(index, row) {
             this.idx = index;
@@ -278,7 +324,9 @@ export default {
         //详情查看
         handleDet(index, row) {
             this.idx = index;
-            this.form = row;
+            fetchDictSubData(row).then(res => {
+                this.tableData3 = res;
+            })
             this.detVisible = true;
         },
         // 保存编辑
@@ -286,13 +334,36 @@ export default {
             this.editVisible = false;
             this.$message.success(`修改第 ${this.idx + 1} 行成功`);
             this.$set(this.tableData, this.idx, this.form);
+            ModifyDictData(this.form);
+
         },
+        saveEditD() {
+            this.editVisible2 = false;
+            this.$message.success(`修改成功`);
+            this.$set(this.tableData, this.idx, this.form);
+            ModifyDictDeData(this.formdet);
+        },
+
         //保存新增
         saveAdd(tableData,event){
             this.addVisible = false;
-            this.$message.success(`新增成功`);
-            this.formadd.id +=1;
-            this.tableData.push(this.formadd);
+            this.$message.success(`新增字典成功`);
+            AddDictData(this.formadd);
+            this.getData();
+            console.log(this.formaddetail);
+            AddDictSubData(this.formaddetail);
+            this.getData();
+        },
+        //新增字典项
+        saveADDD(){
+            this.formaddd.dId = this.tableData3[0].dId;//因为索引一致
+            this.$message.success(`新增字典项成功`);
+            console.log(this.formaddd);
+            AddDictSubData(this.formaddd);
+            this.getData();
+
+            this.detVisible = false;
+            this.addVisible2 = false;
         },
 
         // 分页导航

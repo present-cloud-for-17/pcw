@@ -10,9 +10,9 @@
             unique-opened
             router
         >
-            <template v-for="item in items">
+            <template v-for="item in items ">
 
-                <template v-if="name == item.unknown"></template>
+                <template v-if="root_test != item.unknown && item.unknown !='all'"></template>
 
                 <template v-else-if="item.subs">
                     <el-submenu :index="item.index" :key="item.index">
@@ -56,54 +56,64 @@
 
 <script>
 import bus from '../default/bus';
+import { fetchRoleData } from '../../core/index_role';
 export default {
     name: 'sidebar',
     data() {
         return {
+            tableData:[],
             name: localStorage.getItem('ms_username'),
+            root_test:localStorage.getItem('ms_status'),
             collapse: false,
+            n:0,
             items: [
                 {
                     icon: 'el-icon-lx-home',
                     index: 'dashboard',
                     title: '系统首页',
-                    unknown:'true'
+                    unknown:'all'
                 },
                 {
                     icon: 'el-icon-lx-calendar',
                     index: 'user',
                     title: '用户信息',
-                    unknown:'teacher'
+                    unknown:'all'
                 },
                 {
-                    icon: 'el-icon-lx-calendar',
-                    index: 'role',
-                    title: '角色信息',
-                    unknown:'teacher'
-                },
-                {
-                    icon: 'el-icon-lx-calendar',
+                    icon: 'el-icon-lx-copy',
                     index: 'class',
                     title: '班课信息',
-                    unknown:'admin'
+                    unknown:'all',
                 },
                 {
                     icon: 'el-icon-lx-copy',
+                    index: 'level',
+                    title: '我的班课',
+                    unknown:'all',
+                },
+                {
+                    icon: 'el-icon-s-order',
                     index: 'tabs',
                     title: '个人消息',
-                    unknown:'admin'
+                    unknown:'all',
                 },
                 {
-                    icon: 'el-icon-lx-copy',
-                    index: 'set',
-                    title: '参数设置',
-                    unknown:'true'
+                    icon: 'el-icon-s-order',
+                    index: 'role',
+                    title: '角色信息',
+                    unknown:'1'
+                },
+                {
+                    icon: 'el-icon-document',
+                    index: 'college',
+                    title: '院校信息',
+                    unknown:'no',
                 },
                 {
                     icon: 'el-icon-lx-warn',
                     index: '7',
                     title: '错误处理',
-                    unknown:'admin',
+                    unknown:'no',
                     subs: [
                         {
                             index: 'permission',
@@ -117,13 +127,13 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-warn',
-                    index: 'level',
+                    index: '8',
                     title: '高级权限',
-                    unknown:'teacher',
+                    unknown:'1',
                     subs: [
                         {
-                            index: 'level',
-                            title: '等级设置'
+                            index:'set',
+                            title:'参数设置'
                         },
                         {
                             index: 'datadictionary',
@@ -135,7 +145,7 @@ export default {
                     icon: 'el-icon-lx-global',
                     index: 'i18n',
                     title: '使用说明',
-                    unknown:'true'
+                    unknown:'no'
                 }
             ]
         };
@@ -146,6 +156,23 @@ export default {
         }
     },
     created() {
+        fetchRoleData(this.query).then(res => {
+            this.tableData = res;
+            if(this.root_test == '1') this.n = 2;
+            else if(this.root_test == '2') this.n = 1;
+            else{
+                this.$router.push('/login');
+            }
+            this.pageTotal = this.tableData.length;
+            for(var x = 1, y = 0; y < 4; y++){
+                x = 0 + this.tableData[this.n].permissions[y].pId;
+                if(this.tableData[this.n].permissions[y].status == 0){
+                    this.items[x].unknown = 'no';
+                }else{
+                    this.items[x].unknown = 'all';
+                }
+            }
+        });
         // 通过 Event Bus 进行组件间通信，来折叠侧边栏
         bus.$on('collapse', msg => {
             this.collapse = msg;

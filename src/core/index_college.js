@@ -1,30 +1,20 @@
 import request from '../shared/components/request';
+import qs from 'qs';
 
-export const fetchRoleData = query => {
+export const fetchCollData = query => {
     return request({
-        url: 'http://175.24.88.62:8080/pcs/role/selectRolePermission.do',
+        url: 'http://175.24.88.62:8080/pcs/school/classify.do',
         method: 'get',
-        data: query,
+        params: query,
         headers:{
             'token':localStorage['ms_token']
         }
     });
 };
 
-export const fetchRolePData = query => {
+export const ModifyCollData = (query) => {
     return request({
-        url: 'http://175.24.88.62:8080/pcs/rolePermission/findAll.do',
-        method: 'get',
-        data: query,
-        headers:{
-            'token':localStorage['ms_token']
-        }
-    });
-};
-
-export const ModifyRoleData = (query) => {
-    return request({
-        url: 'http://175.24.88.62:8080/pcs/rolePermission/updateByrIdAndpId.do',
+        url: 'http://175.24.88.62:8080/pcs/school/updateByPrimaryKey.do',
         method: 'post',
         data: query,
         emulateJSON: true,
@@ -34,9 +24,9 @@ export const ModifyRoleData = (query) => {
     });
 };
 
-export const AddRoleData = (query) => {
+export const AddCollData = (query) => {
     return request({
-        url: 'http://175.24.88.62:8080/pcs/role/insert.do',
+        url: 'http://175.24.88.62:8080/pcs/school/insert.do',
         method: 'post',
         data: query,
         emulateJSON: true,
@@ -46,10 +36,10 @@ export const AddRoleData = (query) => {
     });
 };
 
-export const DelRoleData = (query) => {
+export const DelCollData = (query) => {
     return request({
-        //url:'/api/role/deleteByPrimaryKey.do',
-        url: 'http://175.24.88.62:8080/pcs/role/deleteByPrimaryKey.do',
+        //url:'/api/school/deleteByPrimaryKey.do',
+        url: 'http://175.24.88.62:8080/pcs/school/deleteByPrimaryKey.do',
         method: 'post',
         data: query,
         emulateJSON: true,
@@ -58,3 +48,17 @@ export const DelRoleData = (query) => {
         }
     });
 };
+
+export const SearchCollData = (query) => {
+    return request({
+        url: 'http://175.24.88.62:8080/pcs/school/selectByPrimaryKey.do',
+        method: 'post',
+        data: query,
+        emulateJSON: true,
+        headers:{
+            'token':localStorage['ms_token']
+        }
+    });
+};
+
+

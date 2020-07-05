@@ -5,7 +5,7 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo">云到后端管理系统</div>
+        <div class="logo">到云后端管理系统</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -44,6 +44,7 @@
                             <el-dropdown-item>我的项目</el-dropdown-item>
                         </a>
                         <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+                        
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
@@ -57,7 +58,7 @@ export default {
         return {
             collapse: false,
             fullscreen: false,
-            name: 'linxin',
+            name: 'pcw',
             message: 2
         };
     },
@@ -71,6 +72,11 @@ export default {
         // 用户名下拉菜单选择事件
         handleCommand(command) {
             if (command == 'loginout') {
+                
+                localStorage.removeItem('ms_uid');
+                localStorage.removeItem('ms_token');
+                localStorage.removeItem('ms_status');
+                localStorage.removeItem('ms_userpeid');
                 localStorage.removeItem('ms_username');
                 this.$router.push('/login');
             }

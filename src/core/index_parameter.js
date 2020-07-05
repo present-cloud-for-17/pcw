@@ -1,30 +1,19 @@
 import request from '../shared/components/request';
 
-export const fetchRoleData = query => {
+export const fetchParData = query => {
     return request({
-        url: 'http://175.24.88.62:8080/pcs/role/selectRolePermission.do',
+        url: 'http://175.24.88.62:8080/pcs/parameter/findAll.do',
         method: 'get',
-        data: query,
+        params: query,
         headers:{
             'token':localStorage['ms_token']
         }
     });
 };
 
-export const fetchRolePData = query => {
+export const ModifyParData = (query) => {
     return request({
-        url: 'http://175.24.88.62:8080/pcs/rolePermission/findAll.do',
-        method: 'get',
-        data: query,
-        headers:{
-            'token':localStorage['ms_token']
-        }
-    });
-};
-
-export const ModifyRoleData = (query) => {
-    return request({
-        url: 'http://175.24.88.62:8080/pcs/rolePermission/updateByrIdAndpId.do',
+        url: 'http://175.24.88.62:8080/pcs/parameter/updateByPrimaryKey.do',
         method: 'post',
         data: query,
         emulateJSON: true,
@@ -34,9 +23,9 @@ export const ModifyRoleData = (query) => {
     });
 };
 
-export const AddRoleData = (query) => {
+export const AddParData = (query) => {
     return request({
-        url: 'http://175.24.88.62:8080/pcs/role/insert.do',
+        url: 'http://175.24.88.62:8080/pcs/parameter/insert.do',
         method: 'post',
         data: query,
         emulateJSON: true,
@@ -46,10 +35,22 @@ export const AddRoleData = (query) => {
     });
 };
 
-export const DelRoleData = (query) => {
+export const DelParData = (query) => {
     return request({
-        //url:'/api/role/deleteByPrimaryKey.do',
-        url: 'http://175.24.88.62:8080/pcs/role/deleteByPrimaryKey.do',
+        //url:'/api/parameter/deleteByPrimaryKey.do',
+        url: 'http://175.24.88.62:8080/pcs/parameter/deleteByPrimaryKey.do',
+        method: 'post',
+        data: query,
+        emulateJSON: true,
+        headers:{
+            'token':localStorage['ms_token']
+        }
+    });
+};
+
+export const SearchParData = (query) => {
+    return request({
+        url: 'http://175.24.88.62:8080/pcs/parameter/selectByPrimaryKey.do',
         method: 'post',
         data: query,
         emulateJSON: true,

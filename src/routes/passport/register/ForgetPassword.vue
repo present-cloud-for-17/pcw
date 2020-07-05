@@ -32,7 +32,7 @@ export default {
                 email: '',
             },
             rules: {
-                username: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+                emailname: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
             },
         };
     },
@@ -40,8 +40,8 @@ export default {
         submitForm() {
             this.$refs.login.validate(valid => {
                 if (valid) {
-                    this.$message.success('发送成功');
-                    this.$router.push('/login');
+                    this.$message.error('请输入正确的邮箱！');
+                    //this.$router.push('/login');
                 } else {
                     this.$message.error('请输入邮箱');
                     console.log('error submit!!');
